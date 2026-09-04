@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Nómade - Administración de Propiedades en Algarrobo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #D6C3A3;
+            --secondary: #B07A5B;
+            --accent: #6F7D5C;
+            --light-bg: #F7F5F2;
+            --border: #E8DFD3;
+            --text: #2B2B2B;
+            --text-light: #8C8C8C;
+            --white: #FFFFFF;
+            --success: #4CAF50;
+            --error: #E74C3C;
+            --shadow-sm: 0 2px 8px rgba(43, 43, 43, 0.08);
+            --shadow-md: 0 8px 24px rgba(43, 43, 43, 0.12);
+            --shadow-lg: 0 12px 32px rgba(111, 125, 92, 0.15);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ====== HEADER/NAV ====== */
+        header {
+            position: sticky;
+            top: 0;
+            background: var(--white);
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--secondary);
+            transition: color 0.3s ease;
+        }
+
+        .logo:hover {
+            color: var(--accent);
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: var(--text);
+            transition: color 0.3s ease;
+            font-weight: 500;
+            position: relative;
+        }
+
+        .nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--secondary);
+            transition: width 0.3s ease;
+        }
+
+        .nav a:hover {
+            color: var(--secondary);
+        }
+
+        .nav a:hover::after {
+            width: 100%;
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+        }
+
+        /* ====== 1. HERO ====== */
+        .hero {
+            padding: 6rem 2rem;
+            background: linear-gradient(135deg, var(--primary) 0%, #E8D5B7 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -200px;
+            width: 500px;
+            height: 100%;
+            background: rgba(176, 122, 91, 0.1);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: floatBubble 6s ease-in-out infinite;
+        }
+
+        @keyframes floatBubble {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border-radius: 4px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: var(--secondary);
+            color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            background: #A06A4D;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 28px rgba(176, 122, 91, 0.3);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0px);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--text);
+            border: 2px solid var(--text);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--secondary);
+            color: var(--secondary);
+            background: rgba(176, 122, 91, 0.05);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-loading::after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            margin-left: 8px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--white);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hero-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        /* ====== 2. EL PROBLEMA ====== */
+        .section {
+            padding: 5rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--secondary);
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .problem-intro {
+            font-size: 1.3rem;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 3rem;
+            font-weight: 500;
+        }
+
+        .problem-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .problem-card {
+            background: var(--light-bg);
+            padding: 2rem;
+            border-left: 4px solid var(--accent);
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .problem-card:nth-child(1) { animation-delay: 0.1s; }
+        .problem-card:nth-child(2) { animation-delay: 0.2s; }
+        .problem-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .problem-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+            background: var(--white);
+        }
+
+        .problem-card h3 {
+            font-size: 1.3rem;
+            color: var(--secondary);
+            margin-bottom: 0.7rem;
+        }
+
+        .problem-card p {
+            font-size: 0.95rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .problem-question {
+            text-align: center;
+            font-size: 1.5rem;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* ====== 3. PROPUESTA DE VALOR ====== */
+        .value-proposition {
+            background: var(--light-bg);
+        }
+
+        .value-intro {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .value-blocks {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .value-block {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .value-block:nth-child(1) { animation-delay: 0.1s; }
+        .value-block:nth-child(2) { animation-delay: 0.2s; }
+        .value-block:nth-child(3) { animation-delay: 0.3s; }
+        .value-block:nth-child(4) { animation-delay: 0.4s; }
+
+        .value-block:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--accent);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+
+        .value-block:hover .value-icon {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        .value-block h3 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .value-block p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ====== 4. CÓMO FUNCIONA ====== */
+        .how-it-works {
+            text-align: center;
+        }
+
+        .process-intro {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 3rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            position: relative;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .process-step:nth-child(1) { animation-delay: 0.1s; }
+        .process-step:nth-child(2) { animation-delay: 0.2s; }
+        .process-step:nth-child(3) { animation-delay: 0.3s; }
+        .process-step:nth-child(4) { animation-delay: 0.4s; }
+        .process-step:nth-child(5) { animation-delay: 0.5s; }
+
+        .step-number {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.1rem;
+            color: var(--text);
+            margin-bottom: 0.8rem;
+        }
+
+        .process-step p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .process-step::after {
+            content: '→';
+            position: absolute;
+            right: -1.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            color: var(--accent);
+        }
+
+        .process-step:last-child::after {
+            content: '';
+        }
+
+        @media (max-width: 900px) {
+            .process-step::after {
+                content: '';
+            }
+        }
+
+        /* ====== 5. PLANES ====== */
+        .plans {
+            background: var(--light-bg);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .plan-card {
+            background: var(--white);
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            padding: 2.5rem;
+            position: relative;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .plan-card:nth-child(1) { animation-delay: 0.1s; }
+        .plan-card:nth-child(2) { animation-delay: 0.2s; }
+        .plan-card:nth-child(3) { animation-delay: 0.3s; }
+
+        .plan-card:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-8px);
+        }
+
+        .plan-badge {
+            position: absolute;
+            top: -12px;
+            right: 2rem;
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .plan-section {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .plan-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .plan-section-title {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--accent);
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+        }
+
+        .plan-features {
+            list-style: none;
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .plan-features li {
+            margin-bottom: 0.5rem;
+            padding-left: 1.5rem;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .plan-features li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        .plan-features li:hover {
+            color: var(--secondary);
+            padding-left: 1.8rem;
+        }
+
+        /* ====== 6. TU PROPIEDAD SIGUE SIENDO TUYA ====== */
+        .ownership-section {
+            background: linear-gradient(135deg, var(--primary) 0%, #E8D5B7 100%);
+        }
+
+        .ownership-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .ownership-block {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 4px;
+            border-left: 4px solid var(--accent);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .ownership-block:nth-child(1) { animation-delay: 0.1s; }
+        .ownership-block:nth-child(2) { animation-delay: 0.2s; }
+        .ownership-block:nth-child(3) { animation-delay: 0.3s; }
+
+        .ownership-block:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .ownership-block h3 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .ownership-block p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ====== 7. ALGARROBO ====== */
+        .algarrobo-section {
+            background: var(--light-bg);
+        }
+
+        .algarrobo-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+            margin-top: 2rem;
+        }
+
+        .algarrobo-text h3 {
+            font-size: 1.8rem;
+            color: var(--secondary);
+            margin-bottom: 1rem;
+        }
+
+        .algarrobo-text p {
+            font-size: 1rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.7;
+        }
+
+        .algarrobo-benefits {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .benefit {
+            display: flex;
+            gap: 1rem;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .benefit:nth-child(1) { animation-delay: 0.1s; }
+        .benefit:nth-child(2) { animation-delay: 0.2s; }
+        .benefit:nth-child(3) { animation-delay: 0.3s; }
+
+        .benefit-icon {
+            font-size: 1.5rem;
+            color: var(--accent);
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .benefit h4 {
+            font-size: 1rem;
+            color: var(--secondary);
+            margin-bottom: 0.3rem;
+        }
+
+        .benefit p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.5;
+        }
+
+        .algarrobo-image {
+            background: linear-gradient(135deg, var(--accent) 0%, var(--secondary) 100%);
+            height: 300px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--white);
+            font-size: 1rem;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @media (max-width: 768px) {
+            .algarrobo-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ====== 8. POTENCIAL DE INGRESOS ====== */
+        .potential-section {
+            background: var(--white);
+        }
+
+        .potential-intro {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .form-container {
+            background: var(--light-bg);
+            padding: 2.5rem;
+            border-radius: 4px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: var(--shadow-sm);
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.9rem;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.95rem;
+            color: var(--text);
+            transition: all 0.3s ease;
+            min-height: 44px;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(111, 125, 92, 0.1);
+            background-color: var(--white);
+        }
+
+        .form-group input::placeholder {
+            color: var(--text-light);
+        }
+
+        .form-group select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B07A5B' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.9rem center;
+            padding-right: 2.5rem;
+        }
+
+        .form-group input.error,
+        .form-group select.error {
+            border-color: var(--error);
+            background-color: rgba(231, 76, 60, 0.05);
+        }
+
+        .form-error {
+            display: none;
+            font-size: 0.8rem;
+            color: var(--error);
+            margin-top: 0.4rem;
+            font-weight: 500;
+        }
+
+        .form-group input.error ~ .form-error,
+        .form-group select.error ~ .form-error {
+            display: block;
+            animation: shake 0.3s ease-in-out;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-success {
+            display: none;
+            background: rgba(76, 175, 80, 0.1);
+            border: 2px solid var(--success);
+            border-radius: 4px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            color: var(--success);
+            font-weight: 600;
+            text-align: center;
+            animation: slideDown 0.5s ease-out;
+        }
+
+        .form-success.show {
+            display: block;
+        }
+
+        /* ====== 9. FAQ ====== */
+        .faq-section {
+            background: var(--light-bg);
+        }
+
+        .faq-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--white);
+            margin-bottom: 1rem;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.8s ease-out backwards;
+        }
+
+        .faq-item:nth-child(1) { animation-delay: 0.05s; }
+        .faq-item:nth-child(2) { animation-delay: 0.1s; }
+        .faq-item:nth-child(3) { animation-delay: 0.15s; }
+        .faq-item:nth-child(4) { animation-delay: 0.2s; }
+        .faq-item:nth-child(5) { animation-delay: 0.25s; }
+        .faq-item:nth-child(6) { animation-delay: 0.3s; }
+        .faq-item:nth-child(7) { animation-delay: 0.35s; }
+        .faq-item:nth-child(8) { animation-delay: 0.4s; }
+        .faq-item:nth-child(9) { animation-delay: 0.45s; }
+        .faq-item:nth-child(10) { animation-delay: 0.5s; }
+
+        .faq-item:hover {
+            border-color: var(--accent);
+            box-shadow: var(--shadow-md);
+        }
+
+        .faq-item.active {
+            border-color: var(--accent);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--white);
+            transition: all 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+            min-height: 60px;
+        }
+
+        .faq-question:hover {
+            background: var(--light-bg);
+            color: var(--secondary);
+        }
+
+        .faq-toggle {
+            font-size: 1.5rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+            flex-shrink: 0;
+            margin-left: 1rem;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0 1.5rem;
+            background: var(--light-bg);
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 500px;
+            padding: 0 1.5rem 1.5rem 1.5rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* ====== 10. CTA FINAL ====== */
+        .cta-final {
+            background: linear-gradient(135deg, var(--secondary) 0%, #A06A4D 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 4rem 2rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .cta-final h2 {
+            font-size: 2.2rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .cta-final p {
+            font-size: 1.05rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--secondary);
+            margin-bottom: 1.5rem;
+            display: inline-block;
+        }
+
+        .btn-white:hover {
+            background: var(--light-bg);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .cta-contact {
+            font-size: 0.95rem;
+            margin-top: 1.5rem;
+        }
+
+        .cta-contact a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: opacity 0.3s ease;
+        }
+
+        .cta-contact a:hover {
+            opacity: 0.8;
+        }
+
+        /* ====== FOOTER ====== */
+        footer {
+            background: var(--text);
+            color: var(--light-bg);
+            padding: 3rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.7rem;
+        }
+
+        .footer-section a {
+            color: var(--light-bg);
+            font-size: 0.9rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-brand {
+            margin-bottom: 1rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.2rem;
+            color: var(--primary);
+            margin-bottom: 0.3rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(111, 125, 92, 0.2);
+            padding-top: 2rem;
+            text-align: center;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        /* ====== UTILITIES ====== */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem !important;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero {
+                padding: 4rem 2rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .nav {
+                display: none;
+            }
+        }
+
+        /* Accesibilidad */
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <div class="logo">Gestión Nómade</div>
+            <ul class="nav">
+                <li><a href="#como-funciona">Cómo funciona</a></li>
+                <li><a href="#planes">Planes</a></li>
+                <li><a href="#faq">Preguntas</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- 1. HERO -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Haz rentable tu propiedad sin preocuparte por la gestión</h1>
+            <p>Administramos propiedades de arriendo temporal en Algarrobo, desde las reservas y huéspedes hasta la limpieza y coordinación local.</p>
+            <div class="hero-ctas">
+                <button class="btn btn-primary" onclick="document.querySelector('#potencial').scrollIntoView({behavior: 'smooth'});">Quiero rentabilizar mi propiedad</button>
+                <button class="btn btn-secondary" onclick="document.querySelector('#como-funciona').scrollIntoView({behavior: 'smooth'});">Conocer cómo funciona</button>
+            </div>
+            <p class="hero-subtitle">Gestión Nómade — administración local en Algarrobo</p>
+        </div>
+    </section>
+
+    <!-- 2. EL PROBLEMA -->
+    <section class="section" id="problema">
+        <div class="container">
+            <p class="problem-intro">Una propiedad vacía sigue generando gastos.</p>
+            
+            <div class="problem-grid">
+                <div class="problem-card">
+                    <h3>Vacía</h3>
+                    <p>Gastos que siguen corriendo aunque no la uses.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Sin gestión</h3>
+                    <p>Reservas, huéspedes, limpieza y mantenciones que terminan dependiendo de ti.</p>
+                </div>
+                <div class="problem-card">
+                    <h3>Sin tiempo</h3>
+                    <p>Una propiedad rentable puede convertirse fácilmente en otro trabajo.</p>
+                </div>
+            </div>
+
+            <p class="problem-question">¿Por qué no ingresos?</p>
+        </div>
+    </section>
+
+    <!-- 3. PROPUESTA DE VALOR -->
+    <section class="section value-proposition">
+        <div class="container">
+            <h2 class="section-title">Tú tienes la propiedad. Nosotros nos encargamos de gestionarla.</h2>
+            
+            <p class="value-intro">Gestión Nómade es tu equipo local en Algarrobo, responsable de que tu propiedad trabaje por ti.</p>
+
+            <div class="value-blocks">
+                <div class="value-block">
+                    <div class="value-icon">🏡</div>
+                    <h3>Rentabilización</h3>
+                    <p>Trabajamos para que tu propiedad genere ingresos cuando no la estás utilizando.</p>
+                </div>
+                <div class="value-block">
+                    <div class="value-icon">👋</div>
+                    <h3>Huéspedes</h3>
+                    <p>Nos encargamos de la comunicación y atención durante la estadía.</p>
+                </div>
+                <div class="value-block">
+                    <div class="value-icon">🧹</div>
+                    <h3>Operación</h3>
+                    <p>Coordinamos limpieza, preparación y necesidades de la propiedad.</p>
+                </div>
+                <div class="value-block">
+                    <div class="value-icon">📍</div>
+                    <h3>Gestión local</h3>
+                    <p>Estamos en Algarrobo. Podemos responder localmente cuando hace falta.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. CÓMO FUNCIONA -->
+    <section class="section how-it-works" id="como-funciona">
+        <div class="container">
+            <h2 class="section-title">Empezar es más simple de lo que parece</h2>
+            
+            <p class="process-intro">El proceso desde tu primera contacto hasta que tu propiedad empiece a trabajar por ti.</p>
+
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3>Conocemos tu propiedad</h3>
+                    <p>Nos cuentas dónde está, cómo es y qué esperas obtener de ella.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3>Evaluamos su potencial</h3>
+                    <p>Revisamos la propiedad y definimos una estrategia de gestión.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3>Preparamos y publicamos</h3>
+                    <p>Optimizamos su presentación y la incorporamos a nuestra gestión.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3>Nos hacemos cargo</h3>
+                    <p>Reservas, huéspedes, limpieza y coordinación.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">05</div>
+                    <h3>Tú recibes los resultados</h3>
+                    <p>Mientras nosotros gestionamos el día a día.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. PLANES -->
+    <section class="section plans" id="planes">
+        <div class="container">
+            <h2 class="section-title">Planes de gestión</h2>
+            
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <h3 class="plan-name">Esencial</h3>
+                    <p class="plan-description">Para propietarios que quieren delegar parte de la gestión.</p>
+                    
+                    <div class="plan-section">
+                        <div class="plan-section-title">Incluye</div>
+                        <ul class="plan-features">
+                            <li>Evaluación de la propiedad</li>
+                            <li>Creación/optimización del anuncio</li>
+                            <li>Estrategia de precios</li>
+                            <li>Gestión de reservas</li>
+                            <li>Comunicación con huéspedes</li>
+                            <li>Asesoría ante dudas puntuales</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Responsabilidad del propietario</div>
+                        <ul class="plan-features">
+                            <li>Reservas confirmadas</li>
+                            <li>Atención a huéspedes</li>
+                            <li>Llaves y acceso</li>
+                            <li>Limpieza y preparación</li>
+                            <li>Operación diaria</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Cómo se cobra</div>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6;">Consulta directamente. Estructuramos según tu situación.</p>
+                    </div>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-badge">Recomendado</div>
+                    <h3 class="plan-name">Completa</h3>
+                    <p class="plan-description">Para quienes quieren olvidarse de la operación diaria.</p>
+                    
+                    <div class="plan-section">
+                        <div class="plan-section-title">Incluye</div>
+                        <ul class="plan-features">
+                            <li>Todo del Plan Esencial</li>
+                            <li>Gestión de calendario</li>
+                            <li>Actualización de precios</li>
+                            <li>Gestión de modificaciones</li>
+                            <li>Seguimiento de evaluaciones</li>
+                            <li>Optimización continua</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Responsabilidad del propietario</div>
+                        <ul class="plan-features">
+                            <li>Limpieza</li>
+                            <li>Lavandería</li>
+                            <li>Llaves y acceso</li>
+                            <li>Revisión física básica</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Cómo se cobra</div>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6;">Comisión sobre ingresos brutos. Sin sorpresas.</p>
+                    </div>
+                </div>
+
+                <div class="plan-card">
+                    <h3 class="plan-name">Premium</h3>
+                    <p class="plan-description">Para propiedades que requieren un nivel superior de atención.</p>
+                    
+                    <div class="plan-section">
+                        <div class="plan-section-title">Incluye</div>
+                        <ul class="plan-features">
+                            <li>Todo del Plan Completa</li>
+                            <li>Check-in y check-out</li>
+                            <li>Gestión de llaves</li>
+                            <li>Coordinación de limpieza</li>
+                            <li>Supervisión del aseo</li>
+                            <li>Revisión entre estadías</li>
+                            <li>Reposición de insumos</li>
+                            <li>Mantenimiento preventivo</li>
+                            <li>Atención de contingencias</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Responsabilidad del propietario</div>
+                        <ul class="plan-features">
+                            <li>Tomar decisiones estratégicas</li>
+                            <li>Recibir reportes</li>
+                            <li>Estar informado</li>
+                        </ul>
+                    </div>
+
+                    <div class="plan-section">
+                        <div class="plan-section-title">Cómo se cobra</div>
+                        <p style="font-size: 0.9rem; color: var(--text); line-height: 1.6;">Comisión diferenciada. Evaluación personalizada.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. TU PROPIEDAD SIGUE SIENDO TUYA -->
+    <section class="section ownership-section" id="propiedad">
+        <div class="container">
+            <h2 class="section-title" style="color: var(--secondary);">Tu propiedad sigue siendo tuya</h2>
+            
+            <div class="ownership-grid">
+                <div class="ownership-block">
+                    <h3>Tú decides</h3>
+                    <p>Disponibilidad, uso personal y decisiones importantes siguen dependiendo de ti. Tienes el control total.</p>
+                </div>
+                <div class="ownership-block">
+                    <h3>Tú sabes</h3>
+                    <p>Recibes información sobre reservas, ingresos y novedades. Siempre estás informado sobre lo que pasa.</p>
+                </div>
+                <div class="ownership-block">
+                    <h3>Nosotros ejecutamos</h3>
+                    <p>Nos encargamos de que el día a día funcione. Tú tienes tu vida. Nosotros tenemos tu propiedad.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. ALGARROBO -->
+    <section class="section algarrobo-section" id="algarrobo">
+        <div class="container">
+            <h2 class="section-title">Gestión local para propiedades locales</h2>
+            
+            <div class="algarrobo-content">
+                <div class="algarrobo-text">
+                    <h3>Conocemos Algarrobo, sus propiedades y a sus visitantes. Estamos cerca, siempre.</h3>
+                    <p>No somos una plataforma remota. Somos tu equipo local en Algarrobo. Estamos aquí cuando hace falta y conocemos el destino como nadie.</p>
+                    
+                    <div class="algarrobo-benefits">
+                        <div class="benefit">
+                            <div class="benefit-icon">🔍</div>
+                            <div>
+                                <h4>Conocimiento local</h4>
+                                <p>Conocemos el destino y su dinámica de viajeros.</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon">🏘</div>
+                            <div>
+                                <h4>Presencia local</h4>
+                                <p>Podemos responder cuando una propiedad necesita atención inmediata.</p>
+                            </div>
+                        </div>
+                        <div class="benefit">
+                            <div class="benefit-icon">🤝</div>
+                            <div>
+                                <h4>Red local</h4>
+                                <p>Coordinamos servicios y proveedores cuando es necesario.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="algarrobo-image">
+                    [Fotografía de Algarrobo]
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. POTENCIAL DE INGRESOS -->
+    <section class="section potential-section" id="potencial">
+        <div class="container">
+            <h2 class="section-title">¿Cuánto podría generar tu propiedad?</h2>
+            
+            <p class="potential-intro">Descubre el potencial de tu propiedad con una evaluación inicial gratuita.</p>
+
+            <div class="form-container">
+                <div class="form-success" id="successMessage">
+                    ✓ Evaluación enviada correctamente. Te contactaremos pronto vía WhatsApp.
+                </div>
+
+                <form id="evaluationForm" action="https://formspree.io/f/xljelwln" method="POST" novalidate>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">¿Dónde está tu propiedad?</label>
+                            <select id="location" name="location" required>
+                                <option value="">Selecciona una ubicación</option>
+                                <option value="algarrobo">Algarrobo</option>
+                                <option value="mirasol">Mirasol</option>
+                                <option value="el-yeco">El Yeco</option>
+                                <option value="otra">Otra zona</option>
+                            </select>
+                            <span class="form-error">Selecciona una ubicación</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Tipo de propiedad</label>
+                            <select id="type" name="type" required>
+                                <option value="">Selecciona tipo</option>
+                                <option value="casa">Casa</option>
+                                <option value="depto">Departamento</option>
+                                <option value="villa">Villa</option>
+                            </select>
+                            <span class="form-error">Selecciona un tipo</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bedrooms">Dormitorios</label>
+                            <select id="bedrooms" name="bedrooms" required>
+                                <option value="">Selecciona cantidad</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4+">4 o más</option>
+                            </select>
+                            <span class="form-error">Selecciona cantidad</span>
+                        </div>
+                        <div class="form-group">
+                            <label for="personal-use">¿La utilizas personalmente?</label>
+                            <select id="personal-use" name="personal_use" required>
+                                <option value="">Selecciona opción</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                                <option value="algunas">Algunas fechas</option>
+                            </select>
+                            <span class="form-error">Selecciona una opción</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Tu nombre</label>
+                        <input type="text" id="name" name="name" placeholder="Nombre completo" required>
+                        <span class="form-error">Por favor, ingresa tu nombre</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">WhatsApp</label>
+                        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+56 9 XXXX XXXX" required>
+                        <span class="form-error">Por favor, ingresa un número válido</span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.5rem;" id="submitBtn">
+                        Recibe una evaluación inicial
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. FAQ -->
+    <section class="section faq-section" id="faq">
+        <div class="container">
+            <h2 class="section-title">Preguntas frecuentes</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Qué pasa si quiero usar mi propiedad?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Tú tienes el control total. Puedes marcar fechas no disponibles, usar la propiedad personalmente o cambiar su disponibilidad cuando lo necesites. La flexibilidad es total.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Cómo se gestionan las reservas?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Nos encargamos de toda la comunicación con potenciales huéspedes, confirmar reservas, responder consultas y coordinar los detalles de llegada. Tú recibes un resumen.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Quién recibe a los huéspedes?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>En el Plan Esencial y Completa, tú coordinas esto. En el Plan Premium, nosotros nos encargamos del check-in, check-out y coordinación de acceso.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Quién se encarga de la limpieza?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>En Plan Esencial y Completa, tú coordinas la limpieza. En Plan Premium, nosotros coordinamos el servicio de limpieza, supervisamos y nos aseguramos de que todo esté perfecto.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Qué pasa si algo se rompe?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Detectamos problemas, coordinamos reparaciones con proveedores locales confiables y gestionamos el costo según corresponda. En Plan Premium, tú solo autorizas; nosotros ejecutamos.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Cómo recibo mis ingresos?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Realizamos depósitos mensuales a tu cuenta. Incluimos reportes detallados de reservas, ingresos brutos, comisiones y cualquier gasto coordinado.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Puedo ver las reservas y movimientos?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí. Recibes reportes regulares con toda la información: calendario de reservas, ingresos, gastos, evaluaciones de huéspedes y rendimiento de tu propiedad.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Hay permanencia mínima?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Conversamos los términos directamente. No creemos en amarrarte. Si funcionamos bien juntos, querrás quedarte.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Qué gastos corren por mi cuenta?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Servicios básicos (agua, luz, gas), mantenimiento de la propiedad y reparaciones estructurales corren por tu cuenta. Limpieza entre huéspedes y servicios coordinados dependen del plan. Todo queda claro en el contrato.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>¿Qué pasa si quiero terminar la gestión?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Podés terminar en cualquier momento. Completamos las reservas vigentes y hacemos la transición ordenada. Los términos exactos están en el contrato.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. CTA FINAL -->
+    <section class="cta-final" id="contacto">
+        <div class="container">
+            <h2>Tu propiedad ya está ahí. Ahora hagámosla trabajar.</h2>
+            <p>Cuéntanos sobre tu propiedad en Algarrobo y evaluemos juntos cómo podemos gestionarla.</p>
+            <button class="btn btn-white" onclick="document.querySelector('#potencial').scrollIntoView({behavior: 'smooth'});">Quiero rentabilizar mi propiedad</button>
+            <div class="cta-contact">
+                Contactanos vía WhatsApp: <a href="https://wa.me/56912345678">+56 9 1234 5678</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-brand">
+                        <h3>Gestión Nómade</h3>
+                        <p>administración local en Algarrobo</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Para propietarios</h4>
+                    <ul>
+                        <li><a href="#como-funciona">Cómo funciona</a></li>
+                        <li><a href="#planes">Planes</a></li>
+                        <li><a href="#faq">Preguntas frecuentes</a></li>
+                        <li><a href="#propiedad">Tu propiedad</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/56912345678">WhatsApp</a></li>
+                        <li><a href="https://instagram.com">Instagram</a></li>
+                        <li><a href="mailto:info@gestion-nomada.cl">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Gestión Nómade. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // FAQ Toggle
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', function() {
+                this.parentElement.classList.toggle('active');
+            });
+        });
+
+        // Form Validation & Submission
+        const form = document.getElementById('evaluationForm');
+        const submitBtn = document.getElementById('submitBtn');
+        const successMessage = document.getElementById('successMessage');
+
+        function validateForm() {
+            let isValid = true;
+            const fields = ['location', 'type', 'bedrooms', 'personal-use', 'name', 'whatsapp'];
+
+            fields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                    isValid = false;
+                } else {
+                    field.classList.remove('error');
+                }
+            });
+
+            // Validate WhatsApp format
+            const whatsappField = document.getElementById('whatsapp');
+            const whatsappRegex = /^\+?56\s?9\s?\d{4}\s?\d{4}$/;
+            if (whatsappField.value && !whatsappRegex.test(whatsappField.value.replace(/\s/g, ''))) {
+                whatsappField.classList.add('error');
+                isValid = false;
+            }
+
+            return isValid;
+        }
+
+        // Real-time validation
+        ['location', 'type', 'bedrooms', 'personal-use', 'name', 'whatsapp'].forEach(fieldId => {
+            const field = document.getElementById(fieldId);
+            field.addEventListener('change', () => {
+                if (field.value.trim()) {
+                    field.classList.remove('error');
+                }
+            });
+            field.addEventListener('blur', () => {
+                if (!field.value.trim()) {
+                    field.classList.add('error');
+                }
+            });
+        });
+
+        // Form submit
+        form.addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            if (!validateForm()) {
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.classList.add('btn-loading');
+            submitBtn.textContent = 'Enviando...';
+
+            // Formspree handles the submission automatically
+            // Just show success message after a brief delay
+            setTimeout(() => {
+                successMessage.classList.add('show');
+                form.reset();
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('btn-loading');
+                submitBtn.textContent = 'Recibe una evaluación inicial';
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 5000);
+            }, 800);
+
+            // Actually submit to Formspree
+            const formData = new FormData(form);
+            fetch(form.action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+        });
+
+        // Smooth scroll for buttons
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add focus management for accessibility
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.activeElement.blur();
+            }
+        });
+    </script>
+</body>
+</html>

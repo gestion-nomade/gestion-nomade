@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión Nómade - Administración de Propiedades en Algarrobo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #D6C3A3;
+            --secondary: #B07A5B;
+            --accent: #2d4f59;
+            --light-bg: #F7F5F2;
+            --border: #E8DFD3;
+            --text: #2B2B2B;
+            --text-light: #8C8C8C;
+            --white: #FFFFFF;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            background: var(--white);
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* ====== HEADER/NAV ====== */
+        header {
+            position: sticky;
+            top: 0;
+            background: #f7f4ef;
+            border-bottom: 1px solid var(--border);
+            z-index: 1000;
+            padding: 1.5rem 2rem;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: block;
+        }
+
+        header .logo {
+            width: 180px;
+            height: auto;
+            max-width: none;
+            object-fit: contain;
+            display: block;
+            transition: opacity 0.3s ease;
+        }
+
+        header .logo:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            header .logo {
+                width: 145px;
+            }
+        }
+
+        .nav {
+            display: flex;
+            gap: 2rem;
+            font-size: 0.9rem;
+            list-style: none;
+        }
+
+        .nav a {
+            color: var(--accent);
+            transition: color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav a:hover {
+            color: var(--accent);
+        }
+
+        @media (max-width: 768px) {
+            .nav {
+                display: none;
+            }
+        }
+
+        /* ====== HERO ====== */
+        .hero {
+            padding: 8rem 2rem;
+            background: linear-gradient(rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.45)), url('algarrobo-hero.png') center/cover no-repeat;
+            position: relative;
+            overflow: hidden;
+            min-height: 600px;
+            display: flex;
+            align-items: center;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            max-width: 700px;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--white);
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--white);
+            margin-bottom: 2rem;
+            line-height: 1.7;
+        }
+
+        .hero-ctas {
+            display: flex;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.9rem 2rem;
+            border-radius: 3px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+        }
+
+        .btn-primary {
+            background: #2D4F59;
+            color: #E8DFD3;
+        }
+
+        .btn-primary:hover {
+            background: #1f3a42;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 79, 89, 0.3);
+        }
+
+        .btn-secondary {
+            background: #B07A5B;
+            color: #E8DFD3;
+        }
+
+        .btn-secondary:hover {
+            background: #A06A4D;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(176, 122, 91, 0.25);
+        }
+
+        /* ====== SECTIONS ====== */
+        .section {
+            padding: 4rem 2rem;
+        }
+
+        .section-title {
+            font-size: 2.2rem;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .section-subtitle {
+            font-size: 1.1rem;
+            text-align: center;
+            color: var(--text);
+            margin-bottom: 2.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ====== QUÉ HACEMOS (4 conceptos) ====== */
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .value-item {
+            text-align: center;
+        }
+
+        .value-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1rem;
+            object-fit: contain;
+            display: block;
+        }
+
+        .value-item h3 {
+            font-size: 1.2rem;
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+        }
+
+        .value-item p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        /* ====== PREPARACIÓN ====== */
+        .preparation-section {
+            background: var(--light-bg);
+        }
+
+        .prep-text {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+        }
+
+        /* ====== CÓMO FUNCIONA ====== */
+        .process-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2.5rem;
+            margin-top: 2rem;
+        }
+
+        .process-step {
+            position: relative;
+        }
+
+        .step-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary);
+            margin-bottom: 0.8rem;
+        }
+
+        .process-step h3 {
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 0.6rem;
+        }
+
+        .process-step p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        /* ====== PLANES ====== */
+        .plans-section {
+            background: var(--light-bg);
+        }
+
+        .planes-intro {
+            text-align: center;
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Tabla comparativa */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2.5rem 0;
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .comparison-table th {
+            background: var(--accent);
+            color: var(--white);
+            padding: 1rem;
+            text-align: center;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+
+        .comparison-table th:first-child {
+            text-align: left;
+        }
+
+        .comparison-table td {
+            padding: 0.9rem 1rem;
+            border-bottom: 1px solid var(--border);
+            font-size: 0.95rem;
+            text-align: center;
+            font-weight: 600;
+            color: var(--secondary);
+        }
+
+        .comparison-table td:first-child {
+            text-align: left;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .comparison-table .check {
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        .comparison-note {
+            text-align: left;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .table-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 2.5rem 0;
+            display: none;
+        }
+
+        .table-image-mobile {
+            display: none;
+            margin: 2.5rem 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        .table-image-mobile img {
+            width: 100%;
+            height: auto;
+            max-width: 100%;
+            display: block;
+            border-radius: 3px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .table-image-mobile {
+                margin: 2.5rem 0;
+                padding: 0;
+                display: block;
+                width: 100%;
+            }
+
+            .table-image-mobile img {
+                width: 100%;
+                max-width: 100%;
+                height: auto;
+                margin: 0 auto;
+                display: block;
+                border-radius: 3px;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .table-wrapper {
+                display: block;
+            }
+
+            .table-image-mobile {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .table-wrapper {
+                display: none;
+            }
+
+            .table-image-mobile {
+                display: block;
+            }
+        }
+
+        /* Cards de planes */
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .plan-card {
+            background: var(--white);
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            padding: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .plan-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 8px 24px rgba(45, 79, 89, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .plan-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: var(--white);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-left: 0.8rem;
+            flex-shrink: 0;
+        }
+
+        .plan-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+
+        .plan-name {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-header .plan-name {
+            margin-bottom: 0;
+        }
+
+        .plan-description {
+            font-size: 0.9rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        .plan-price {
+            font-size: 1rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Acordeón de detalles */
+        .accordion {
+            margin-top: 1.5rem;
+        }
+
+        .accordion-item {
+            border-top: 1px solid var(--border);
+        }
+
+        .accordion-header {
+            padding: 1rem 0;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: var(--secondary);
+            font-size: 0.9rem;
+            user-select: none;
+            transition: color 0.2s ease;
+        }
+
+        .accordion-header:hover {
+            color: var(--secondary);
+        }
+
+        .accordion-toggle {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .accordion-item.active .accordion-toggle {
+            transform: rotate(180deg);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            padding: 0;
+        }
+
+        .accordion-item.active .accordion-content {
+            max-height: 600px;
+            padding: 0 0 1rem 0;
+        }
+
+        .accordion-list {
+            list-style: none;
+            font-size: 0.85rem;
+            color: var(--text);
+            line-height: 1.8;
+        }
+
+        .accordion-list li {
+            padding-left: 1.2rem;
+            position: relative;
+        }
+
+        .accordion-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* ====== CONTROL ====== */
+        .control-section {
+            background: var(--light-bg);
+        }
+
+        .control-text {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* ====== GESTIÓN LOCAL ====== */
+        .local-section {
+            background: var(--white);
+        }
+
+        .local-text {
+            font-size: 1rem;
+            color: var(--text);
+            line-height: 1.7;
+            max-width: 700px;
+            margin: 0 auto 1.5rem;
+            text-align: center;
+        }
+
+        .local-features {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .local-feature {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .local-icon {
+            width: 70px;
+            height: 70px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .local-feature span {
+            font-size: 0.9rem;
+        }
+
+        .separator {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        /* ====== EVALUACIÓN ====== */
+        .evaluation-section {
+            background: var(--light-bg);
+        }
+
+        .form-container {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 3px;
+            max-width: 600px;
+            margin: 2rem auto 0;
+            border: 1px solid var(--border);
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.4rem;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid var(--border);
+            border-radius: 3px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text);
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(45, 79, 89, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        @media (max-width: 600px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-icon {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            background: var(--accent);
+            color: var(--white);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 0.4rem;
+            transition: background 0.2s ease;
+        }
+
+        .tooltip-icon:hover {
+            background: var(--secondary);
+        }
+
+        .tooltip-text {
+            visibility: hidden;
+            width: 220px;
+            background: var(--accent);
+            color: var(--white);
+            text-align: center;
+            padding: 0.7rem;
+            border-radius: 3px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            margin-left: -110px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            box-shadow: 0 4px 12px rgba(45, 79, 89, 0.2);
+        }
+
+        .tooltip-text::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--accent) transparent transparent transparent;
+        }
+
+        .tooltip-container:hover .tooltip-text {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Paisajismo field styles */
+        .landscaping-label {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            position: relative;
+        }
+
+        .landscaping-label label {
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .landscaping-options {
+            display: flex;
+            gap: 1.5rem;
+            margin-top: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .landscaping-options label {
+            margin-bottom: 0;
+            font-weight: normal;
+        }
+
+        /* ====== FAQ ====== */
+        .faq-section {
+            background: var(--white);
+        }
+
+        .faq-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: var(--light-bg);
+            margin-bottom: 0.8rem;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .faq-question {
+            padding: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.3s ease;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .faq-question:hover {
+            background: var(--border);
+            color: var(--accent);
+        }
+
+        .faq-toggle {
+            font-size: 1.2rem;
+            color: var(--accent);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .faq-item.active .faq-answer {
+            max-height: 400px;
+            padding: 0 1.2rem 1.2rem 1.2rem;
+        }
+
+        .faq-answer p {
+            font-size: 0.9rem;
+            color: var(--text);
+            line-height: 1.7;
+        }
+
+        /* ====== CTA FINAL ====== */
+        .cta-final {
+            background: linear-gradient(135deg, var(--secondary) 0%, #A06A4D 100%);
+            color: var(--white);
+            text-align: center;
+            padding: 3.5rem 2rem;
+        }
+
+        .cta-final h2 {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            color: var(--white);
+        }
+
+        .cta-final p {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--secondary);
+            display: inline-block;
+            margin-bottom: 1.5rem;
+        }
+
+        .btn-white:hover {
+            background: var(--light-bg);
+        }
+
+        .cta-contact {
+            font-size: 0.95rem;
+            margin-top: 1rem;
+        }
+
+        .cta-contact a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .cta-contact a:hover {
+            text-decoration: underline;
+        }
+
+        /* ====== MODALES ====== */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            border-radius: 3px;
+            padding: 2.5rem;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+
+        .modal-icon.error {
+            color: #e74c3c;
+        }
+
+        .modal-content h3 {
+            font-size: 1.5rem;
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+        }
+
+        .modal-content p {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* ====== FOOTER ====== */
+        footer {
+            background: #2d4f59;
+            color: var(--light-bg);
+            padding: 2.5rem 2rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: var(--primary);
+            margin-bottom: 0.8rem;
+            font-weight: 700;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-section a {
+            color: var(--light-bg);
+            font-size: 0.85rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--primary);
+        }
+
+        .footer-logo {
+            width: 160px;
+            height: auto;
+            object-fit: contain;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .footer-bottom {
+            border-top: 1px solid rgba(111, 125, 92, 0.2);
+            padding-top: 1rem;
+            text-align: center;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* ====== MEDIA QUERIES ====== */
+        @media (max-width: 768px) {
+            .section {
+                padding: 3rem 2rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .hero {
+                padding: 4rem 2rem;
+                min-height: 500px;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .value-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+
+            .process-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .comparison-table {
+                font-size: 0.85rem;
+            }
+
+            .comparison-table th,
+            .comparison-table td {
+                padding: 0.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- HEADER -->
+    <header>
+        <div class="header-content">
+            <img src="nomade-logo.png" alt="Gestión Nómade" class="logo">
+            <ul class="nav">
+                <li><a href="#como-funciona">Cómo funciona</a></li>
+                <li><a href="#planes">Planes</a></li>
+                <li><a href="#preguntas">Preguntas frecuentes</a></li>
+                <li><a href="#evaluacion">Evaluación</a></li>
+            </ul>
+        </div>
+    </header>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container hero-content">
+            <h1>Haz que tu propiedad trabaje por ti.</h1>
+            <p>Administramos propiedades de arriendo temporal en Algarrobo para que generen ingresos, entreguen una buena experiencia a sus huéspedes y se mantengan bien gestionadas.</p>
+            <p style="font-size: 1rem; color: rgba(255,255,255,0.95);"><strong>Nosotras nos encargamos del día a día. Tú mantienes el control.</strong></p>
+            <div class="hero-ctas">
+                <a href="#evaluacion" class="btn btn-primary">Quiero evaluar mi propiedad</a>
+                <a href="#como-funciona" class="btn btn-secondary">Conocer cómo funciona</a>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- QUÉ HACEMOS -->
+    <section class="section" style="background: var(--light-bg);">
+        <div class="container">
+            <h2 class="section-title">Una gestión que conecta rentabilidad, experiencia y operación.</h2>
+            <p class="section-subtitle" style="margin-bottom: 2rem;">No se trata solo de conseguir reservas.</p>
+            
+            <div class="value-grid">
+                <div class="value-item">
+                    <img src="rentabilizacion.png" alt="Rentabilidad" class="value-icon">
+                    <h3>Rentabilidad</h3>
+                    <p>Optimizamos la publicación, precios y disponibilidad para aprovechar mejor cada oportunidad de arriendo.</p>
+                </div>
+                <div class="value-item">
+                    <img src="huespedes.png" alt="Experiencia" class="value-icon">
+                    <h3>Experiencia</h3>
+                    <p>Cuidamos la comunicación con huéspedes y los aspectos que influyen en sus evaluaciones.</p>
+                </div>
+                <div class="value-item">
+                    <img src="operacion.png" alt="Operación" class="value-icon">
+                    <h3>Operación</h3>
+                    <p>Coordinamos las tareas necesarias para que la propiedad funcione entre una estadía y otra.</p>
+                </div>
+                <div class="value-item">
+                    <img src="gestion-local.png" alt="Gestión local" class="value-icon">
+                    <h3>Gestión local</h3>
+                    <p>Estamos en Algarrobo y contamos con una red local para responder cuando la propiedad necesita atención.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+    <!-- CÓMO FUNCIONA -->
+    <section class="section" id="como-funciona">
+        <div class="container">
+            <h2 class="section-title">Empezar es más simple de lo que parece.</h2>
+            
+            <div class="process-steps">
+                <div class="process-step">
+                    <div class="step-number">01</div>
+                    <h3>Conocemos y evaluamos</h3>
+                    <p>Revisamos tu propiedad: ubicación, estado, presentación, equipamiento y potencial. Evaluamos si reúne las condiciones para funcionar como alojamiento temporal y qué aspectos debemos considerar antes de comenzar.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">02</div>
+                    <h3>Preparamos</h3>
+                    <p>Una vez definida su viabilidad, trabajamos en lo necesario para comenzar, optimizando su presentación y estrategia de precios para ofrecer una mejor experiencia desde la primera estadía.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">03</div>
+                    <h3>Gestionamos</h3>
+                    <p>Nos hacemos cargo de las reservas, huéspedes y tareas correspondientes al plan que elijas.</p>
+                </div>
+                <div class="process-step">
+                    <div class="step-number">04</div>
+                    <h3>Tú recibes resultados</h3>
+                    <p>Mantienes el control de tu propiedad y recibes información clara sobre su desempeño.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PLANES -->
+    <section class="section plans-section" id="planes">
+        <div class="container">
+            <h2 class="section-title">Elige cuánto quieres delegar.</h2>
+            <p class="planes-intro">Tres formas de trabajar con nosotras, según cuánto quieras involucrarte en la operación de tu propiedad.</p>
+
+            <!-- Tabla comparativa - Imagen para mobile -->
+            <div class="table-image-mobile">
+                <img src="tabla-vertical.png" alt="Comparativa de planes: Asesoría, Gestión y Nómade. Asesoría incluye estrategia y anuncio. Gestión incluye estrategia y anuncio, reservas y huéspedes, precios y calendario, reportes mensuales. Nómade incluye todo de Gestión más limpieza coordinada, check-in/check-out, supervisión entre estadías y mantenciones y contingencias.">
+            </div>
+
+            <!-- Tabla comparativa - HTML para desktop -->
+            <div class="table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Asesoría</th>
+                            <th>Gestión</th>
+                            <th>Nómade</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Estrategia y anuncio</strong></td>
+                            <td>✓</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reservas y huéspedes</strong></td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Precios y calendario</strong></td>
+                            <td>*</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Reportes mensuales</strong></td>
+                            <td>—</td>
+                            <td>✓</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Limpieza coordinada</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Check-in / check-out</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supervisión entre estadías</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Mantenciones y contingencias</strong></td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td>✓</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="comparison-note">
+                <p><strong>*</strong> Propuesta de estrategia de precios inicial. En Gestión y Nómade incluye gestión dinámica continua.</p>
+            </div>
+
+            <!-- Cards de planes -->
+            <div class="plans-grid">
+                <div class="plan-card">
+                    <h3 class="plan-name">Asesoría</h3>
+                    <p class="plan-description">Tú gestionas el día a día. Nosotras te ayudamos a hacerlo mejor.</p>
+                    <p class="plan-price">Tarifa personalizada según tu situación</p>
+                    
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                Ver qué incluye
+                                <span class="accordion-toggle">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="accordion-list">
+                                    <li>Evaluación de la propiedad</li>
+                                    <li>Creación u optimización del anuncio</li>
+                                    <li>Propuesta de estrategia de precios inicial</li>
+                                    <li>Recomendaciones para mejorar la experiencia</li>
+                                    <li>Orientación sobre la cuenta de manager</li>
+                                    <li>Asesoría ante dudas puntuales</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-card">
+                    <div class="plan-header">
+                        <h3 class="plan-name">Gestión</h3>
+                        <span class="plan-badge">Recomendado</span>
+                    </div>
+                    <p class="plan-description">Nosotras gestionamos reservas, huéspedes y la operación online. Tú mantienes el control.</p>
+                    <p class="plan-price">Comisión sobre ingresos brutos</p>
+                    
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                Ver qué incluye
+                                <span class="accordion-toggle">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="accordion-list">
+                                    <li>Todo lo del Plan Asesoría</li>
+                                    <li>Gestión de reservas y calendario</li>
+                                    <li>Comunicación con huéspedes</li>
+                                    <li>Actualización de precios</li>
+                                    <li>Gestión de modificaciones</li>
+                                    <li>Seguimiento de evaluaciones</li>
+                                    <li>Optimización continua</li>
+                                    <li>Reporte mensual con ingresos y gastos</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="plan-card">
+                    <h3 class="plan-name">Nómade</h3>
+                    <p class="plan-description">La gestión más completa. Nosotras nos hacemos cargo de la operación presencial.</p>
+                    <p class="plan-price">Comisión diferenciada según la propiedad</p>
+                    
+                    <div class="accordion">
+                        <div class="accordion-item">
+                            <div class="accordion-header" onclick="toggleAccordion(this)">
+                                Ver qué incluye
+                                <span class="accordion-toggle">▼</span>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="accordion-list">
+                                    <li>Todo lo del Plan Gestión</li>
+                                    <li>Check-in y check-out</li>
+                                    <li>Gestión de llaves y accesos</li>
+                                    <li>Coordinación y supervisión de limpieza</li>
+                                    <li>Revisión entre estadías</li>
+                                    <li>Reposición de insumos</li>
+                                    <li>Mantenimiento preventivo</li>
+                                    <li>Gestión de contingencias</li>
+                                    <li>Inventario y reporte de estado</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTROL -->
+    <section class="section control-section">
+        <div class="container">
+            <h2 class="section-title">Tú sigues teniendo el control.</h2>
+            <p class="control-text">
+                Delegar la gestión no significa perder tu propiedad ni tus decisiones. Tú decides cuándo utilizarla y qué cambios aprobar. Nosotras ejecutamos la operación y te mantenemos informado.
+            </p>
+        </div>
+    </section>
+
+    <!-- GESTIÓN LOCAL -->
+    <section class="section local-section">
+        <div class="container">
+            <h2 class="section-title">Estamos en Algarrobo porque tu propiedad también.</h2>
+            <p class="local-text">
+                La gestión de un departamento no ocurre solo frente a una pantalla. Nuestra presencia local nos permite <strong>coordinar, supervisar y responder cuando la propiedad necesita atención</strong>, apoyándonos en una red de servicios de confianza.
+            </p>
+            <div class="local-features">
+                <div class="local-feature">
+                    <img src="conocimiento-local.png" alt="Conocimiento local" class="local-icon">
+                    <span style="font-weight: 600; color: var(--secondary);">Conocimiento local</span>
+                </div>
+                <div class="separator">•</div>
+                <div class="local-feature">
+                    <img src="presencia-local.png" alt="Presencia local" class="local-icon">
+                    <span style="font-weight: 600; color: var(--secondary);">Presencia</span>
+                </div>
+                <div class="separator">•</div>
+                <div class="local-feature">
+                    <img src="red-local.png" alt="Red de apoyo" class="local-icon">
+                    <span style="font-weight: 600; color: var(--secondary);">Red de apoyo</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EVALUACIÓN -->
+    <section class="section evaluation-section" id="evaluacion">
+        <div class="container">
+            <h2 class="section-title">Conoce el potencial de tu propiedad.</h2>
+            <p class="section-subtitle">
+                Cuéntanos dónde está, cómo es y cuánto la utilizas. Evaluaremos su ubicación, características y condiciones para orientarte sobre su potencial de arriendo temporal y las mejoras que podrían ayudar a potenciarla.
+            </p>
+            <p style="text-align: center; color: var(--text-light); font-size: 0.9rem; margin-bottom: 1.5rem;">Evaluación inicial sin costo.</p>
+
+            <div class="form-container">
+                <form>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="location">¿Dónde está tu propiedad?</label>
+                            <select id="location" name="location" required>
+                                <option value="">Selecciona una ubicación</option>
+                                <option value="algarrobo">Algarrobo</option>
+                                <option value="mirasol">Mirasol</option>
+                                <option value="el-yeco">El Yeco</option>
+                                <option value="otra">Otra zona</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="type">Tipo de propiedad</label>
+                            <select id="type" name="type" required>
+                                <option value="">Selecciona tipo</option>
+                                <option value="casa">Casa</option>
+                                <option value="depto">Departamento</option>
+                                <option value="villa">Villa</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bedrooms">Dormitorios</label>
+                            <select id="bedrooms" name="bedrooms" required>
+                                <option value="">Selecciona cantidad</option>
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4+">4 o más</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="personal-use">¿La utilizas personalmente?</label>
+                            <select id="personal-use" name="personal-use" required>
+                                <option value="">Selecciona opción</option>
+                                <option value="si">Sí</option>
+                                <option value="no">No</option>
+                                <option value="algunas">Algunas fechas</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="landscaping-label">
+                            <label>¿Te gustaría potenciar tu propiedad con paisajismo?</label>
+                            <span class="tooltip-container">
+                                <span class="tooltip-icon" title="Servicio adicional de paisajismo">ℹ</span>
+                                <span class="tooltip-text">Servicio adicional de paisajismo. Diseñamos y mejoramos espacios exteriores para hacer tu propiedad más atractiva y acogedora para los huéspedes.</span>
+                            </span>
+                        </div>
+                        <div class="landscaping-options">
+                            <label style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="radio" name="landscaping" value="si" style="cursor: pointer;">
+                                Sí
+                            </label>
+                            <label style="display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                                <input type="radio" name="landscaping" value="no" style="cursor: pointer;">
+                                No
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="name">Tu nombre</label>
+                        <input type="text" id="name" name="name" placeholder="Nombre completo" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="whatsapp">WhatsApp</label>
+                        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+56 9 XXXX XXXX" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" name="email" placeholder="tu@email.com" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Quiero evaluar mi propiedad</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section faq-section" id="preguntas">
+        <div class="container">
+            <h2 class="section-title">Preguntas frecuentes</h2>
+            
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Puedo usar mi propiedad cuando quiera?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Sí. Tú decides cuándo utilizarla y puedes bloquear fechas según tus necesidades.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué pasa si algo se rompe?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Detectamos la situación y, según el plan contratado, coordinamos la solución con proveedores locales. Los costos correspondientes a reparaciones son informados y gestionados con el propietario.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Cómo recibo mis ingresos?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Recibes tus ingresos según la modalidad acordada y un reporte con el detalle de reservas, ingresos, comisiones y gastos correspondientes.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué gastos son responsabilidad del propietario?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Los gastos propios de la propiedad, como servicios básicos, mantenimiento y reparaciones estructurales, corresponden al propietario. Los servicios asociados a la operación dependen del plan contratado y quedan establecidos previamente.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Existe permanencia mínima?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Las condiciones de permanencia se establecen al contratar el servicio y quedan especificadas en el acuerdo.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question" onclick="toggleFaq(this)">
+                        <span>¿Qué pasa si quiero terminar la gestión?</span>
+                        <span class="faq-toggle">▼</span>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Se realiza una transición ordenada considerando las reservas vigentes y las condiciones establecidas en el contrato.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>Tu propiedad ya está aquí. Ahora hagámosla trabajar.</h2>
+            <p>Cuéntanos sobre ella y descubre si tiene potencial para el arriendo temporal y qué necesitaría para comenzar.</p>
+            <a href="#evaluacion" class="btn btn-primary">Quiero evaluar mi propiedad</a>
+            <div class="cta-contact">
+                O escríbenos directamente por WhatsApp: <a href="https://wa.me/56984227139">+56 9 8422 7139</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- MODALES -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon">✓</div>
+            <h3>¡Perfecto!</h3>
+            <p>Recibimos tu información. Nos pondremos en contacto pronto para evaluar tu propiedad.</p>
+            <button class="btn btn-primary" onclick="cerrarModal()">Entendido</button>
+        </div>
+    </div>
+
+    <div id="errorModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-icon error">✕</div>
+            <h3>Algo salió mal</h3>
+            <p>Por favor, intenta nuevamente o contacta vía WhatsApp.</p>
+            <button class="btn btn-primary" onclick="cerrarModal()">Intentar de nuevo</button>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div style="margin-bottom: 1rem;">
+                        <img src="logo-footer.png" alt="Gestión Nómade" class="footer-logo">
+                        <p>Administración local de propiedades de arriendo temporal en Algarrobo.</p>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Para propietarios</h4>
+                    <ul>
+                        <li><a href="#como-funciona">Cómo funciona</a></li>
+                        <li><a href="#planes">Planes</a></li>
+                        <li><a href="#preguntas">Preguntas frecuentes</a></li>
+                        <li><a href="#evaluacion">Evaluación</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contacto</h4>
+                    <ul>
+                        <li><a href="https://wa.me/56984227139">WhatsApp</a></li>
+                        <li><a href="mailto:gestion.nomade.contacto@gmail.com">Email</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Gestión Nómade. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Toggle FAQ
+        function toggleFaq(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        // Toggle Accordion
+        function toggleAccordion(element) {
+            element.parentElement.classList.toggle('active');
+        }
+
+        // Cerrar modales
+        function cerrarModal() {
+            document.getElementById('successModal').classList.remove('active');
+            document.getElementById('errorModal').classList.remove('active');
+        }
+
+        // Formulario con Formspree
+        const form = document.querySelector('form');
+        if (form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                
+                const formData = new FormData(form);
+                
+                try {
+                    const response = await fetch('https://formspree.io/f/xljelwln', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        document.getElementById('successModal').classList.add('active');
+                        form.reset();
+                    } else {
+                        document.getElementById('errorModal').classList.add('active');
+                    }
+                } catch (error) {
+                    document.getElementById('errorModal').classList.add('active');
+                }
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
